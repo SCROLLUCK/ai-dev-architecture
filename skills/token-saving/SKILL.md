@@ -5,6 +5,9 @@ description: How to spend fewer tokens and less quota in every session — rtk f
 
 # Token saving
 
+> Machine-specific paths, habits and notes: read `local.md` next to this file if it exists.
+> It is yours and never versioned; this file stays generic.
+
 Every turn re-sends the whole context, so the cost is **context size × number of turns**.
 Saving means: keep the context small, take noisy work out of it, and give each piece of work
 to the cheapest worker that can do it well. Measure first (`~/.claude/quota.sh`,

@@ -5,6 +5,9 @@ description: Keep the laptop (Linux, Cinnamon desktop; adapt the settings keys t
 
 # Keep the machine awake during long work
 
+> Machine-specific paths, habits and notes: read `local.md` next to this file if it exists.
+> It is yours and never versioned; this file stays generic.
+
 Suspend here comes from Cinnamon's idle timer (`sleep-inactive-*-type 'suspend'` after 600 s).
 It is requested by the user's own uid, and logind ignores inhibitors from that uid, so
 **`systemd-inhibit` alone does not hold it** — it failed once in the middle of a release build.

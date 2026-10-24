@@ -12,7 +12,10 @@ Sanitized copies of my own Claude Code skills, published as reusable templates.
 Notes for reuse:
 
 - Install by copying a folder to `~/.claude/skills/` (user level) or `<repo>/.claude/skills/` (project level).
-- These are written for one machine and one workflow. Adapt paths, ports and commands.
+- Keep the skill files generic and put what is yours (paths, ports, project names, habits,
+  incident notes) in a `local.md` next to each `SKILL.md`; every skill reads it when it exists.
+  `local.md` is git-ignored, so you can update the skills from this repo without losing it.
+  How you install them (copy, symlink, a sync script) is up to you.
 - Some skills mention helper scripts that are personal and **not included** here: a quota reader
   (`quota.sh`), a status-line snapshot writer, a worktree command runner (`wt-run.sh`) and the
   Antigravity wrapper (`agy-run.sh`). The docs describe what each one does so you can write your own.
