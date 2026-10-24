@@ -13,8 +13,9 @@ Notes for reuse:
 
 - Install by copying a folder to `~/.claude/skills/` (user level) or `<repo>/.claude/skills/` (project level).
 - Keep the skill files generic and put what is yours (paths, ports, project names, habits,
-  incident notes) in a `local.md` next to each `SKILL.md`; every skill reads it when it exists.
-  `local.md` is git-ignored, so you can update the skills from this repo without losing it.
+  incident notes) in `~/.claude/skills-local/<skill>.md`, outside any repo; every skill reads it
+  when it exists. You can update the skills from this repo without touching it, and it can never
+  be pushed by mistake.
   How you install them (copy, symlink, a sync script) is up to you.
 - Some skills mention helper scripts that are personal and **not included** here: a quota reader
   (`quota.sh`), a status-line snapshot writer, a worktree command runner (`wt-run.sh`) and the

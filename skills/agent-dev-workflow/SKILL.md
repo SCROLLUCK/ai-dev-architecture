@@ -5,8 +5,8 @@ description: The orchestrator + subagents way of developing software, portable t
 
 # Agent-driven development — lead, agents, PO
 
-> Machine-specific paths, habits and notes: read `local.md` next to this file if it exists.
-> It is yours and never versioned; this file stays generic.
+> Machine-specific paths, habits and notes: read `~/.claude/skills-local/agent-dev-workflow.md` if it exists.
+> It lives outside this repo and is never versioned; this file stays generic.
 
 The roles are fixed; the project only supplies the
 commands. Setting it up in a new repo: [references/new-project.md](references/new-project.md).

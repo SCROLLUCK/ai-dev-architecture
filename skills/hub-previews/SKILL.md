@@ -5,8 +5,8 @@ description: Use the local Project Hub (http://project-hub.local:4380) from any 
 
 # Hub previews
 
-> Machine-specific paths, habits and notes: read `local.md` next to this file if it exists.
-> It is yours and never versioned; this file stays generic.
+> Machine-specific paths, habits and notes: read `~/.claude/skills-local/hub-previews.md` if it exists.
+> It lives outside this repo and is never versioned; this file stays generic.
 
 The Project Hub (`<path-to>/project-hub`) runs in a Docker container
 (`project-hub`, API and UI on the same port **4380**). It runs every project's dev server on a
