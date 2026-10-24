@@ -71,7 +71,8 @@ bash docs-check.sh [docs_dir] --vault   # structure only
 ```
 
 It fails (exit 1, list on stderr) on: missing `summary:` / `updated:`, unresolved wikilinks,
-notes missing from `index.md`, and (if the map exists) drift. Folders starting with `.` or `_`
+notes missing from `index.md`, a changed note whose `updated:` is not today, and (if the
+map exists) drift. Folders starting with `.` or `_`
 (`_templates/`) are skipped. Copy it into the project (e.g.
 `management-scripts/docs-check.sh`) so it is versioned with the repo.
 

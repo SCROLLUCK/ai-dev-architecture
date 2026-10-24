@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
-# Keeps an Obsidian vault honest. Exit 1 with a list on any failure. Needs bash + python3 (+ git for drift).
+# Keeps an Obsidian vault honest. Exit 1 with a list on any failure. Needs bash + python3 (+ git for
+# the date and drift checks).
 #   docs-check.sh [docs_dir]            default docs; working tree vs HEAD
 #   docs-check.sh [docs_dir] --staged   drift against what is staged (the commit hook)
 #   docs-check.sh [docs_dir] --vault    structure only, no drift
 # Vault: every note has `summary:` and `updated: YYYY-MM-DD` front matter; every [[wikilink]]
-# resolves (alias, #heading, attachments ok); every note is linked from <docs_dir>/index.md.
+# resolves (alias, #heading, attachments ok); every note is linked from <docs_dir>/index.md;
+# a changed note carries today's `updated:`.
 # Drift (opt-in): if the map exists (DOCS_MAP, default <docs_dir>/docs-map.txt; lines
 # `code/path/prefix  note,other/note`, notes relative to docs_dir, no .md, longest prefix wins),
 # a changed code path must come with a change to one of its notes.
@@ -14,7 +16,7 @@ DIR="docs"; MODE="tree"
 for a in "$@"; do case "$a" in --staged) MODE=staged;; --vault) MODE=vault;; *) DIR="$a";; esac; done
 [ -d "$DIR" ] || { echo "docs-check: no such dir: $DIR" >&2; exit 1; }
 python3 - "$DIR" "$MODE" "${DOCS_MAP:-$DIR/docs-map.txt}" <<'PY'
-import os, re, subprocess, sys
+import datetime, os, re, subprocess, sys
 d, mode, mapf = sys.argv[1].rstrip("/"), sys.argv[2], sys.argv[3]
 fail, notes, files = [], {}, set()
 for root, dirs, fs in os.walk(d):
@@ -53,14 +55,22 @@ if index:
     for n in sorted(notes):
         if n != "index" and n not in listed: fail.append(f"{d}/index.md does not link [[{n}]]")
 
-def git(*a): return subprocess.run(["git", *a], capture_output=True, text=True).stdout.split("\n")
+def git(*a):
+    try: return subprocess.run(["git", *a], capture_output=True, text=True).stdout.split("\n")
+    except FileNotFoundError: return []
+if mode == "staged": changed = git("diff", "--cached", "--name-only", "--diff-filter=ACMRD")
+else: changed = git("diff", "HEAD", "--name-only", "--diff-filter=ACMRD") + git("ls-files", "--others", "--exclude-standard")
+changed = {c for c in changed if c}
+top = (git("rev-parse", "--show-toplevel") or [""])[0]
+pre = os.path.relpath(os.path.abspath(d), top).rstrip("/") + "/" if top else d + "/"
+cn = {c[len(pre):-3] for c in changed if c.startswith(pre) and c.endswith(".md")}
+
+today = datetime.date.today().isoformat()
+for n in sorted(cn & set(notes)):
+    m = re.search(r"^updated:\s*(\d{4}-\d{2}-\d{2})", open(notes[n], encoding="utf-8", errors="replace").read(), re.M)
+    if m and m.group(1) != today: fail.append(f"{notes[n]}: `updated:` is {m.group(1)}, the note changed today ({today})")
+
 if mode != "vault" and os.environ.get("DOCS_CHECK_SKIP_DRIFT") != "1" and os.path.exists(mapf):
-    if mode == "staged": changed = git("diff", "--cached", "--name-only", "--diff-filter=ACMRD")
-    else: changed = git("diff", "HEAD", "--name-only", "--diff-filter=ACMRD") + git("ls-files", "--others", "--exclude-standard")
-    changed = {c for c in changed if c}
-    top = git("rev-parse", "--show-toplevel")[0]
-    pre = os.path.relpath(os.path.abspath(d), top).rstrip("/") + "/" if top else d + "/"
-    cn = {c[len(pre):-3] for c in changed if c.startswith(pre) and c.endswith(".md")}
     mp = []
     for line in open(mapf):
         line = line.strip()
