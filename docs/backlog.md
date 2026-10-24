@@ -11,6 +11,7 @@
 - [ ] Shorten skill descriptions; stub the personal references the skills point to
 
 ## Done
+- [x] docs-check: a changed note must carry today's `updated:` (port from job-matching)
 - [x] Graphify A/B: at least 5 more rounds measuring performance; adopt Graphify if it keeps winning
 - [x] Graphify A/B pilot in job-matching; record the verdict in docs-vault.md
 - [x] Document how Obsidian and Graphify are used in the workflow
