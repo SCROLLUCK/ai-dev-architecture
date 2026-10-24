@@ -147,7 +147,7 @@ user runs it). Remove the entry when the deploy goes away.
 ## Config
 
 `~/.config/project-hub/config.json` (read on every request, no restart):
-`roots`, `scanDepth`, `pinned`, `hidden`, `projects` — per id:
+`roots`, `scanDepth`, `pinned`, `hidden`, `tokens` (per git host), and `projects` — per id:
 `devCommand`, `devCwd`, `showcaseUrl`. Change it through the API; `PUT /api/settings` replaces
 each key you send whole (`projects`, `roots`), so read, merge, write:
 
@@ -158,7 +158,7 @@ curl -s $H | jq '{projects: (.projects + {"<id>": ((.projects["<id>"] // {}) + {
 # add a root: jq '{roots: (.roots + ["~/code/clients"] | unique)}'
 ```
 
-Other things the hub reads from a project, no
+Never send `tokens` back (they come masked). Other things the hub reads from a project, no
 setup needed: `docs/backlog.md` (global backlog convention), an Obsidian vault (`.obsidian` in
-the root or `docs/`), CI runs, and
+the root or `docs/`), CI runs (GitHub via `gh`, GitLab needs a token per host in Settings), and
 Claude Code sessions.
