@@ -1,8 +1,6 @@
 # Backlog
 
 ## Next
-- [x] Document how Obsidian and Graphify are used in the workflow
-- [x] Survey how Obsidian (and Graphify) are used across the REPOS projects and improve that usage
 - [ ] Keep architecture variants (token saving, large projects, complex projects, ...) on branches; main points to them and holds the install files
 - [ ] Change the delegation default: delegate only parallelizable, verbose or self-contained work; do small things inline
 - [ ] Scope the adversarial review to correctness and requirement gaps only
@@ -13,6 +11,8 @@
 - [ ] Shorten skill descriptions; stub the personal references the skills point to
 
 ## Done
+- [x] Document how Obsidian and Graphify are used in the workflow
+- [x] Survey how Obsidian (and Graphify) are used across the REPOS projects and improve that usage
 - [x] Enforce the key rules with hooks instead of prose (add -A, push, Agent without model, worktree cap)
 - [x] Research other agent-driven dev architectures and compare honestly with ours
 - [x] Move local.md out of the architecture repo so personal notes can never be pushed
