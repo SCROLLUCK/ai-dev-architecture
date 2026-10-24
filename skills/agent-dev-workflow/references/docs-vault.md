@@ -45,7 +45,20 @@ dashboards and templates committed). Allowed, but the project's docs must state 
 ## Dataview and Graphify
 
 - Dataview is optional. A dashboard queries only folders that exist.
-- Graphify: not in use yet; evaluation pending.
+- Graphify: not adopted. A/B, 2026-10-24, job-matching (945 files), Sonnet, read-only, same
+  prompt per arm. The rule was: adopt if the graph costs ≥15% fewer tokens or less time, with
+  no fewer real findings.
+  - Pilot: 116k / 108s with the graph vs 120k / 130s without; the plain run caught one more gap.
+  - Rounds 1–4 (impact, flow trace, bug hunt, dead code): 371k / 331s with the graph vs 333k /
+    274s without, i.e. 11% more tokens and 21% more time. Findings matched, except dead code,
+    where the plain run found one more.
+  - Round 5 (API contract): the graph arm never ran graphify. It took 69k / 161s vs 99k / 83s
+    for the plain arm and found less.
+  - All 5 rounds: 440k / 492s with the graph vs 432k / 357s without.
+  - Agents rated the graph high for "who calls X" and low for flows and dead code. It has no
+    nodes for constants or for where a field is stored or compared, so grep did the real work.
+  - Building it is free (`graphify update .`, AST only, ~8s). It may help as a first map of an
+    unknown repo; this test did not measure that. Treat its claims as hints and confirm in source.
 
 ## The checker
 
