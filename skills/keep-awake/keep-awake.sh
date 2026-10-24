@@ -19,16 +19,34 @@ DIR="$HOME/.claude/state/keep-awake"
 HOLDERS="$DIR/holders"
 SAVED="$DIR/saved"
 PIDFILE="$DIR/watchdog.pid"
+EVENTS="$DIR/events.jsonl"
 mkdir -p "$HOLDERS"
 
 with_lock() { exec 9>"$DIR/lock"; flock 9; }
+
+json_str() { local s=${1//\\/\\\\}; printf '"%s"' "${s//\"/\\\"}"; }
+
+# One JSON line per lease event, read by dashboards for a timeline.
+# project = main checkout of the git repo the caller runs in (worktrees map to their repo).
+log_event() {
+  local event=$1 holder=$2 expires=${3:-} project=""
+  if [ "$event" = on ] || [ "$event" = renew ]; then
+    project=$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null) && project=${project%/.git} || project=$PWD
+  fi
+  {
+    printf '{"ts":%s,"event":"%s","holder":%s' "$(date +%s)" "$event" "$(json_str "$holder")"
+    [ -n "$expires" ] && printf ',"expires":%s' "$expires"
+    [ -n "$project" ] && printf ',"project":%s' "$(json_str "$project")"
+    printf '}\n'
+  } >>"$EVENTS"
+}
 
 drop_expired() {
   local f now
   now=$(date +%s)
   for f in "$HOLDERS"/*; do
     [ -e "$f" ] || continue
-    [ "$(cat "$f")" -gt "$now" ] || rm -f "$f"
+    [ "$(cat "$f")" -gt "$now" ] || { rm -f "$f"; log_event expire "$(basename "$f")"; }
   done
 }
 
@@ -66,14 +84,17 @@ case "${1:-status}" in
       done >"$SAVED"
       for key in "${KEYS[@]}"; do gsettings set "$SCHEMA" "$key" "'nothing'"; done
     fi
-    echo $(($(date +%s) + $(awk -v h="$hours" 'BEGIN { printf "%d", h * 3600 }'))) >"$HOLDERS/$holder"
+    event=on; [ -f "$HOLDERS/$holder" ] && event=renew
+    expires=$(($(date +%s) + $(awk -v h="$hours" 'BEGIN { printf "%d", h * 3600 }')))
+    echo "$expires" >"$HOLDERS/$holder"
+    log_event "$event" "$holder" "$expires"
     start_watchdog
     echo "awake: lease '$holder' for ${hours} h"
     ;;
   off)
     holder=${2:?holder name required}
     with_lock
-    rm -f "$HOLDERS/$holder"
+    [ -f "$HOLDERS/$holder" ] && { rm -f "$HOLDERS/$holder"; log_event off "$holder"; }
     drop_expired
     if has_holders; then
       echo "released '$holder'; still held by: $(ls "$HOLDERS" | tr '\n' ' ')"

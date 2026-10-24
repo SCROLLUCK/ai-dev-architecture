@@ -48,5 +48,11 @@ X-GNOME-Autostart-enabled=true
 - A stalled log or a jumped clock: `journalctl --since "-2h" | grep -iE "suspend|resume"`
   before blaming the network.
 
+Every lease change is appended to `~/.claude/state/keep-awake/events.jsonl`, one JSON line
+each: `ts` (epoch), `event` (`on`, `renew`, `off`, `expire`), `holder`, and for `on`/`renew`
+`expires` (epoch) and `project` (the main checkout of the git repo the call ran in, so a
+worktree maps to its repo; the cwd outside git). Call `on` from the project's directory so
+dashboards can tell which project held the machine awake.
+
 Never edit the power keys by hand while a lease is live — the script saved the originals
 and will write them back over any manual change.
