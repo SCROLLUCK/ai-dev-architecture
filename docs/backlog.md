@@ -1,7 +1,9 @@
 # Backlog
 
 ## Next
-- [ ] Document how Obsidian and Graphify are used in the workflow
+- [x] Document how Obsidian and Graphify are used in the workflow
+- [x] Survey how Obsidian (and Graphify) are used across the REPOS projects and improve that usage
+- [ ] Keep architecture variants (token saving, large projects, complex projects, ...) on branches; main points to them and holds the install files
 - [ ] Change the delegation default: delegate only parallelizable, verbose or self-contained work; do small things inline
 - [ ] Scope the adversarial review to correctness and requirement gaps only
 - [ ] Log one line per task (model, rework, caught by review) to measure the method
