@@ -1,0 +1,10 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Agent|Task|EnterWorktree",
+        "hooks": [{ "type": "command", "command": "python3 <repo>/hooks/guard.py" }]
+      }
+    ]
+  }
+}

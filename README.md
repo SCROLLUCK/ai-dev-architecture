@@ -81,6 +81,7 @@ The rules live in the skills ([skills/](skills/README.md)); they are the source 
 - [skills/](skills/README.md): my own Claude Code skills (`agent-dev-workflow`, `hub-previews`, `token-saving`, `keep-awake`).
 - [templates/CLAUDE.md](templates/CLAUDE.md): a generic global instruction file.
 - [templates/subagent-brief.md](templates/subagent-brief.md): the brief every subagent gets.
+- [hooks/](hooks/README.md): a `PreToolUse` guard that enforces staging by name, push approval, explicit subagent models and the worktree cap.
 
 ## Status and honesty
 

@@ -34,4 +34,6 @@ Create only what the project needs; the rules in SKILL.md work with nothing but 
 8. **Memory** — first session: save who the PO is and any working preferences they state.
 
 Global pieces already available everywhere: this skill, `maestri-manager`, `keep-awake`,
-the budget/model rules in `~/.claude/CLAUDE.md`.
+the budget/model rules in `~/.claude/CLAUDE.md`, and the guard hook (`hooks/guard.py` in the
+ai-dev-architecture repo) that enforces staging by name, push approval, explicit subagent
+models and the worktree cap.
