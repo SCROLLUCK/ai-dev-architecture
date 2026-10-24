@@ -107,4 +107,5 @@ suspend, hibernate or sit idle into a sleep.
 - [references/delegation.md](references/delegation.md) — what to delegate, model by effort, the brief template, Maestri recruits
 - [references/definition-of-done.md](references/definition-of-done.md) — what "ready for acceptance" means and the adversarial checklist
 - [references/preview-before-merge.md](references/preview-before-merge.md) — putting a worktree in front of the PO
+- [references/docs-vault.md](references/docs-vault.md) — the `docs/` Obsidian vault convention and `scripts/docs-check.sh`
 - [references/new-project.md](references/new-project.md) — the pieces to create in a new repo
