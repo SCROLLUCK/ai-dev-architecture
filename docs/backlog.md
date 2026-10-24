@@ -9,6 +9,7 @@
 - [ ] Shorten skill descriptions; stub the personal references the skills point to
 
 ## Done
+- [x] Keep personal paths, habits and notes in a separate local layer so the live skills can be updated straight from this repo
 - [x] Fix keep-awake: a reboot during a lease leaves suspend disabled; fractional hours break
 - [x] Fix the backlog convention so the main-checkout edit does not conflict with the task branch
 - [x] Fix the subagent brief contradiction on commits
