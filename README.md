@@ -64,6 +64,8 @@ the results itself, shows them running, and only merges after the PO says yes.
 
 ## Documentation
 
+The rules live in the skills ([skills/](skills/README.md)); they are the source of truth. These docs explain the why. When the two disagree, the skill wins and the doc gets fixed.
+
 | Doc | Topic |
 |---|---|
 | [orchestration-and-subagents](docs/orchestration-and-subagents.md) | Roles, what to delegate, the brief, outside agents, recruits |

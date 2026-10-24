@@ -17,6 +17,18 @@ K=<skills-dir>/keep-awake/keep-awake.sh
 $K on  <holder> [hours]   # take or renew a lease; default 4 h
 $K off <holder>           # release; the last release restores the settings
 $K status                 # current values, live leases, watchdog
+$K recover                # after a reboot: restore the settings or re-arm the watchdog
+```
+
+A reboot during a lease kills the watchdog and leaves suspend off. Run `recover` at login
+so the machine gets its settings back, e.g. `~/.config/autostart/keep-awake-recover.desktop`:
+
+```ini
+[Desktop Entry]
+Type=Application
+Name=keep-awake recover
+Exec=<skills-dir>/keep-awake/keep-awake.sh recover
+X-GNOME-Autostart-enabled=true
 ```
 
 ## How to use it
@@ -24,7 +36,7 @@ $K status                 # current values, live leases, watchdog
 - **Holder** = who needs the machine: the session id or the demand's name
   (`deploy-v2.8.0`, `demand-filters`). Several sessions and Maestri recruits run at once;
   each takes its own lease, and the settings only come back when the last one releases.
-- **Hours** = an honest estimate with slack. The lease is the safety net: if a session dies
+- **Hours** = an honest estimate with slack (fractions work: `0.5`). The lease is the safety net: if a session dies
   without `off`, a watchdog restores the settings when the lease expires. Long work → renew
   with `on` again at each stage instead of asking for 12 h up front.
 - **Always `off` when the work ends**, in the same turn — including when it ends in failure.

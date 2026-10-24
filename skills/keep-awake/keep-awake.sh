@@ -4,6 +4,7 @@
 #   keep-awake.sh on  <holder> [hours]   take or renew a lease (default 4 h)
 #   keep-awake.sh off <holder>           release it; the last release restores the settings
 #   keep-awake.sh status
+#   keep-awake.sh recover                after a reboot: restore or re-arm (run it at login)
 #
 # Suspend here comes from Cinnamon's idle timer, requested by the same uid, and logind ignores
 # an inhibitor from that uid, so systemd-inhibit alone does not hold it: the idle and lid
@@ -33,7 +34,17 @@ drop_expired() {
 
 has_holders() { compgen -G "$HOLDERS/*" >/dev/null; }
 
-watchdog_alive() { [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; }
+# A pid file left by a reboot can name an unrelated process, so check what it runs.
+watchdog_alive() {
+  [ -f "$PIDFILE" ] && grep -qa keep-awake "/proc/$(cat "$PIDFILE")/cmdline" 2>/dev/null
+}
+
+start_watchdog() {
+  watchdog_alive && return 0
+  # 9>&- : the watchdog must not inherit the lock fd, or it holds the lock forever.
+  nohup systemd-inhibit --what=sleep:idle:handle-lid-switch --mode=block \
+    --why="keep-awake: long work running" "$0" _watch >/dev/null 2>&1 9>&- &
+}
 
 restore() {
   [ -f "$SAVED" ] || return 0
@@ -47,6 +58,7 @@ case "${1:-status}" in
   on)
     holder=${2:?holder name required}
     hours=${3:-4}
+    [[ $hours =~ ^[0-9]+([.][0-9]+)?$ ]] || { echo "hours must be a number: $hours" >&2; exit 2; }
     with_lock
     if [ ! -f "$SAVED" ]; then
       for key in "${KEYS[@]}"; do
@@ -54,12 +66,8 @@ case "${1:-status}" in
       done >"$SAVED"
       for key in "${KEYS[@]}"; do gsettings set "$SCHEMA" "$key" "'nothing'"; done
     fi
-    echo $(($(date +%s) + hours * 3600)) >"$HOLDERS/$holder"
-    if ! watchdog_alive; then
-      # 9>&- : the watchdog must not inherit the lock fd, or it holds the lock forever.
-      nohup systemd-inhibit --what=sleep:idle:handle-lid-switch --mode=block \
-        --why="keep-awake: long work running" "$0" _watch >/dev/null 2>&1 9>&- &
-    fi
+    echo $(($(date +%s) + $(awk -v h="$hours" 'BEGIN { printf "%d", h * 3600 }'))) >"$HOLDERS/$holder"
+    start_watchdog
     echo "awake: lease '$holder' for ${hours} h"
     ;;
   off)
@@ -74,6 +82,19 @@ case "${1:-status}" in
       watchdog_alive && kill "$(cat "$PIDFILE")" 2>/dev/null || true
       rm -f "$PIDFILE"
       echo "released '$holder'; suspend settings restored"
+    fi
+    ;;
+  recover)
+    # A reboot kills the watchdog but keeps the 'nothing' settings and the leases.
+    with_lock
+    drop_expired
+    if has_holders; then
+      start_watchdog
+      echo "leases still live; watchdog running"
+    else
+      restore
+      rm -f "$PIDFILE"
+      echo "no live lease; suspend settings restored"
     fi
     ;;
   _watch)
@@ -101,7 +122,7 @@ case "${1:-status}" in
     [ -f "$SAVED" ] && echo "saved originals:" && cat "$SAVED" || true
     ;;
   *)
-    echo "usage: $0 on <holder> [hours] | off <holder> | status" >&2
+    echo "usage: $0 on <holder> [hours] | off <holder> | status | recover" >&2
     exit 2
     ;;
 esac

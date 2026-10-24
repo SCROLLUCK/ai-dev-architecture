@@ -17,7 +17,9 @@ One convention for every project: `docs/backlog.md`.
 
 - `##` sections group items (Next, Done, or any theme); each item is a Markdown checkbox, `- [ ]` open and `- [x]` done.
 - **Every request from the PO becomes an open item the moment it is asked, before work starts.** One item per thing asked, in the PO's own words, under `## Next`.
-- It is written in the **main checkout**, not a worktree, so tooling sees it immediately. It is committed with the task.
+- It is written in the **main checkout**, not a worktree, so tooling sees it immediately, and left uncommitted there.
+- The task branch never touches `docs/backlog.md`, so the merge cannot conflict with it.
+- After the merge, the lead ticks the item and commits `docs/backlog.md` on the trunk, named in the same approval as the merge.
 - Tick the item when it ships, or move it to the changelog where the project has one.
 - A project without the file gets one.
 

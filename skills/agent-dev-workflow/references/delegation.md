@@ -7,9 +7,9 @@
 | Reading, sweeps, investigation | `Explore` or `general-purpose`, **haiku** (sonnet if it needs reasoning) | independent ones in parallel, one per agent, in one message |
 | Implementation with a clear plan | `general-purpose`, **sonnet**, on its own branch/worktree | the lead verifies and merges |
 | Design, unknown cause, audit, prod, data migration, security | **opus** (or the lead itself) | judgment work |
-| Adversarial review | an agent that did **not** write the code, **opus**, read-only | see definition-of-done |
+| Adversarial review | an agent that did **not** write the code, read-only, **sonnet** with a lean prompt (diff + touched files) | **opus** only for prod data migration or security; see definition-of-done |
 | Long job (test suite, build, monitoring) | background; keep working | |
-| Mechanical work when the Claude quota is tight | `antigravity` (Google quota) | needs a complete brief; it has no conversation |
+| Mechanical or well-specified work, read-only second opinion | `antigravity` (Google quota) **first**; haiku/sonnet when its quota is tight or the task needs this conversation | needs a complete brief; it has no conversation |
 
 Model is always explicit — never inherit the session's. Fable only on request.
 
@@ -32,8 +32,8 @@ reads the docs and the decision log before coding."* Then:
    agent reads the proposal, the deltas and the design, builds only that task (test
    first) against the deltas' scenarios, and stops and reports when the change is wrong
    or silent — it never fills the gap with its own reading of the request.
-2. **Branch + worktree path.** "Work and commit only there. Never touch master or the
-   main tree. Do not push."
+2. **Branch + worktree path.** "Work only there. Never touch master or the main tree.
+   Do not commit or push: the lead commits after verifying."
 3. **Files and notes to read first** (exact paths) and the project rules that apply
    (i18n, component library, runtime invariants, language of identifiers).
 4. **Done-criterion**: the commands that must pass (tests, lint, type-check), and the

@@ -17,7 +17,8 @@ report; do not fill the gap with your own reading.")
 
 WHERE TO WORK
 Branch: <feat/name>   Worktree: <path>
-Work and commit only there. Never touch the trunk or the main working tree. Do not push.
+Work only there. Never touch the trunk or the main working tree.
+Do not commit or push: the lead commits after verifying.
 
 READ FIRST
 - <exact file paths / notes>

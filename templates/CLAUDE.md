@@ -34,7 +34,8 @@ Skills: `agent-dev-workflow` (the whole method), `token-saving`, `hub-previews`.
 
 Each project keeps `docs/backlog.md`: `##` sections, items as checkboxes (`- [ ]` open,
 `- [x]` done). Every request from me becomes an open item under `## Next` the moment it is
-asked, before work starts, in the main checkout. Tick it when it ships.
+asked, before work starts, in the main checkout (uncommitted; task branches never touch it).
+After the merge, tick it and commit the backlog on the trunk with the same approval.
 
 ## Verify in a real browser
 

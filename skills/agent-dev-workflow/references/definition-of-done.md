@@ -13,7 +13,8 @@ claim, made only after all of this, verified by the lead and not by the develope
 4. **UI: screenshots** at desktop and mobile widths, light and dark, opened by the lead,
    plus the console and the network requests checked in a browser the lead drives
    (Claude in Chrome, else Playwright). The PO is never asked "did it work?".
-5. **Adversarial review** by an agent that didn't write the code (opus, read-only): "what
+5. **Adversarial review** by an agent that didn't write the code, read-only, on sonnet with a
+   lean prompt (diff + touched files; opus only for prod data migration or security): "what
    is half-done, which edge case breaks, what does the deploy need".
 6. **Every scenario of the OpenSpec change's deltas checked with evidence** (test,
    screenshot, command output), when the project uses OpenSpec; `openspec validate

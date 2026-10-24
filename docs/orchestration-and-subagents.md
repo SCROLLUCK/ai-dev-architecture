@@ -24,7 +24,7 @@ plans, hands slices to devs and reviews diffs; devs implement closed slices on t
 | Design, unknown-cause bug, audit, prod, data migration, security | top tier (or the lead) | judgment work |
 | Adversarial review | an agent that did **not** write the code, read-only | mid tier with a lean prompt (diff + touched files); top tier only for prod data migration or security |
 | Long job (test suite, build, monitoring) | background | the lead keeps working |
-| Mechanical work when Claude quota is tight | outside agent (Antigravity) | needs a complete brief; it cannot see the conversation |
+| Mechanical or well-specified work, read-only second opinion | outside agent (Antigravity) first; Claude cheap tier as fallback | needs a complete brief; it cannot see the conversation |
 
 The model is always set explicitly on the subagent; it never inherits the session's.
 
@@ -43,7 +43,7 @@ Full template: [templates/subagent-brief.md](../templates/subagent-brief.md). Th
 
 1. **Specialist persona** in one or two sentences. This is what makes the agent act like a specialist.
 2. **Goal** in the PO's terms. With a spec-driven project the goal is "implement task N.M of the change's `tasks.md`".
-3. **Branch and worktree path**: work and commit only there, never the trunk, no push.
+3. **Branch and worktree path**: work only there, never the trunk; no commit, no push (the lead commits after verifying).
 4. **Files and notes to read first**, exact paths, plus the project rules that apply.
 5. **Done criterion**: the commands that must pass.
 6. **Out of scope**: no unrelated refactors, no new abstractions.
