@@ -9,6 +9,7 @@
 - [ ] Have agents hand over evidence so the lead spot-checks instead of re-verifying everything
 - [ ] Restrict outside agents to reading and mechanical work unless tests can verify their diff
 - [ ] Shorten skill descriptions; stub the personal references the skills point to
+- [ ] Cap the cost of a browser check: in job-matching (24/10) each attempt burned 100k+ tokens, four in a row — the lead retried a failing approach and pulled DOM dumps, logs and screenshots into context. Enforce one attempt, short pass/fail output, setup in a cheap subagent, a token ceiling (~20k), stop and ask on failure
 
 ## Done
 - [x] docs-check: a changed note must carry today's `updated:` (port from job-matching)
